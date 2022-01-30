@@ -1,0 +1,116 @@
+AnimatedVectorDrawable
+----------------------
+----------------------
+https://developer.android.com/reference/android/graphics/drawable/AnimatedVectorDrawable
+-------------------------------------------------------------------
+
+This class animates properties of a VectorDrawable with animations defined using ObjectAnimator or AnimatorSet. 
+
+Starting from API 25, AnimatedVectorDrawable runs on RenderThread 
+
+ it is not possible to precisely coordinate a RenderThread-enabled AnimatedVectorDrawable with UI thread animations. Additionally, Animatable2.AnimationCallback.onAnimationEnd(Drawable) will be called the frame after the AnimatedVectorDrawable finishes on the RenderThread. 
+ 
+ AnimatedVectorDrawable can be defined in either three separate XML files, or one XML. 
+ 
+ Define an AnimatedVectorDrawable in three separate XML files
+ -------------------------------------------------------------
+Animations can be performed on the animatable attributes in VectorDrawable. These attributes will be animated by ObjectAnimator.
+ The ObjectAnimator's target can be the root element, a group element or a path element.The targeted elements need to be named uniquely within the same VectorDrawable.
+  
+ Here are all the animatable attributes in VectorDrawable: 
+ 
+ <vector> -- 	alpha
+ <group>  --	rotation,pivotX,pivotY,scaleX,scaleY,
+		translateX,translateY
+ <path>   -- 	pathData,fillColor,strokeColor,strokeWidth,
+ 		strokeAlpha,fillAlpha,trimPathStart,trimPathEnd,
+		trimPathOffset
+ <clip-path> -- pathData
+ 
+ -------Example - vectordrawable.xml IN DRAWABLE FOLDER-----------
+  <vector xmlns:android="http://schemas.android.com/apk/res/android"
+     android:height="64dp"
+     android:width="64dp"
+     android:viewportHeight="600"
+     android:viewportWidth="600" >
+     <group
+         android:name="rotationGroup"
+         android:pivotX="300.0"
+         android:pivotY="300.0"
+         android:rotation="45.0" >
+         <path
+             android:name="v"
+             android:fillColor="#000000"
+             android:pathData="M300,70 l 0,-70 70,70 0,0 -70,70z" />
+     </group>
+ </vector>
+ 
+ XML for AnimatedVectorDrawable
+ ---------------------------------
+ An AnimatedVectorDrawable element has a VectorDrawable attribute, and one or more target element(s).
+ he target element can specify its target by android:name attribute, and link the target with the proper ObjectAnimator or AnimatorSet by android:animation attribute. 
+ 
+ -------------------ANIMATEDVECTOR.XML IN DRAWABLE FOLDER----------
+ <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+     android:drawable="@drawable/vectordrawable" >
+     <target
+         android:name="rotationGroup"
+         android:animation="@animator/rotation" />
+     <target
+         android:name="v"
+         android:animation="@animator/path_morph" />
+ </animated-vector>
+ 
+ XML for Animations defined using ObjectAnimator or AnimatorSet
+ ---------------------------------------------------------------
+-------------EXAMPLE- rotation.xml IN ANIMATOR FOLDER------------
+ <objectAnimator
+     android:duration="6000"
+     android:propertyName="rotation"
+     android:valueFrom="0"
+     android:valueTo="360" />
+ 
+---------------EXAMPLE- path_morph.xml IN ANIMATOR FOLDER---------
+Note that the paths must be compatible for morphing. Specifically, the paths must have the same commands, in the same order, and must have the same number of parameters for each command.
+
+ <set xmlns:android="http://schemas.android.com/apk/res/android">
+     <objectAnimator
+         android:duration="3000"
+         android:propertyName="pathData"
+         android:valueFrom="M300,70 l 0,-70 70,70 0,0 -70,70z"
+         android:valueTo="M300,70 l 0,-70 70,0  0,140 -70,0 z"
+         android:valueType="pathType"/>
+ </set>
+ 
+ now set the 
+  val animatedVectorDrawableImage=findViewById<ImageView>(R.id.image2)
+        animatedVectorDrawableImage.setBackgroundResource(R.drawable.animatorvectordrawable)
+        val drawable= animatedVectorDrawableImage.background as AnimatedVectorDrawable
+        animatedVectorDrawableImage.setOnClickListener{
+            if (drawable!!.isRunning){
+                drawable.stop()
+            }else{
+                drawable.start()
+            }
+        }
+ 
+ Define an AnimatedVectorDrawable all in one XML file
+ -------------------------------------------------------
+ 
+ 
+ 
+ 
+ https://developer.android.com/training/animation/reveal-or-hide-view
+ 
+ 
+ 
+ crossfade animation shown here uses ViewPropertyAnimator available for Android 3.1 (API level 12) and higher.
+ 
+ 
+ https://medium.com/cr8resume/viper-architecture-for-ios-project-with-simple-demo-example-7a07321dbd29
+ 
+ 
+ 
+ 
+
+
