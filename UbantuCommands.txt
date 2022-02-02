@@ -1,0 +1,8 @@
+  appending "sudo " in preposition to each command is compulsory
+  
+    apt update: This command only fetches the information on latest packages that can be upgraded. Note that it does not actually upgrade any packages on the system, only refreshes the index local to the system. This package information is obtained from standard official sources and then stored locally on the system. If ever you need to check from which sources the package information gets picked, you will see it in under /etc/apt/sources.list on the system.
+    apt list –upgradable: This command will then display the packages that have updates available and therefore can be upgraded on the system. This information is based on the information fetched previously from the update command
+    apt upgrade: This is the actual command that does the upgrade of the packages in the system. Once executed, the OS will be successfully upgraded. Note that this command can install new packages if the dependencies require it, but it will never remove packages.
+    apt full-upgrade: This command does a little more than what the upgrade command does. In addition to upgrading new packages and installing new packages as required, it also removes existing installed packages if it determines that the dependencies are no longer required. Use this option with caution as it can cause unexpected system behavior if your application is dependent on a specific version of the package.
+    apt autoremove: This command is used to remove unused packages which are no longer needed by the dependent packages. This can be executed after apt upgrade
+
